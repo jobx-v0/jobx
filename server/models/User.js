@@ -9,6 +9,11 @@ const userSchema = new mongoose.Schema({
     unique: true,
     trim: true,
   },
+  role: {
+    type: String,
+    default: 'candidate',
+    trim: true,
+  },
   email: {
     type: String,
     required: true,

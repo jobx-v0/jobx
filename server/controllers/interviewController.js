@@ -3,7 +3,6 @@ const Interview = require('../models/Interview'); // Import the Interview model
 const MAX_ATTEMPTS = process.env.MAX_ATTEMPTS || 5; // Default to 5 if not specified in .env
 const OpenAI = require('openai');
 const mongoose = require('mongoose');
-const ObjectId = mongoose.Types.ObjectId;
 const Question = require('../models/Question');
 
 // Setup OpenAI client

@@ -23,15 +23,3 @@ export function ConfigurationsMain() {
   );
 }
 
-
-
-export function InterviewQuestionsMain() {
-  // Add state and functions for managing interview questions
-
-  return (
-    <div className="p-6">
-      <h1 className="text-xl font-bold text-black mb-4">Interview Questions</h1>
-      {/* Add form or component for adding/editing interview questions */}
-    </div>
-  );
-}

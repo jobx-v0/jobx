@@ -1,6 +1,7 @@
 import { Button } from "@nextui-org/react";
 import { Locate, Luggage, Crown, Trash2, Pencil } from "lucide-react";
 import { useDisclosure } from "@nextui-org/react";
+import { useAuth } from "../../context/AuthContext";
 import DeleteConfirmationModel from "./DeleteConfirmationModal";
 
 const SkillTag = ({ skill }) => {
@@ -10,7 +11,6 @@ const SkillTag = ({ skill }) => {
     </div>
   );
 };
-
 
 export default function JobPostMain({
   id,
@@ -24,9 +24,10 @@ export default function JobPostMain({
   yearsOfExperience,
   skills,
   handleDelete,
-  handleEdit
+  handleEdit,
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { userInfo } = useAuth();
 
   const confirmDelete = () => {
     handleDelete(id);
@@ -37,18 +38,22 @@ export default function JobPostMain({
     <>
       <div className="relative bg-gray-100 shadow-md rounded-3xl p-6 my-5">
         {/* Render delete icon */}
-        <div className="absolute top-2 right-2">
-          <Trash2
-            className="text-red-500 cursor-pointer"
-            onClick={onOpen}
-          />
-        </div>
-        <div className="absolute top-2 right-10">
-          <Pencil
-            className="text-blue-500 cursor-pointer"
-            onClick={() => handleEdit(id)}
-          />
-        </div>
+        {userInfo?.role === "admin" && (
+          <>
+            <div className="absolute top-2 right-2">
+              <Trash2
+                className="text-red-500 cursor-pointer"
+                onClick={onOpen}
+              />
+            </div>
+            <div className="absolute top-2 right-10">
+              <Pencil
+                className="text-blue-500 cursor-pointer"
+                onClick={() => handleEdit(id)}
+              />
+            </div>
+          </>
+        )}
         <div className="container px-4 md:px-6">
           <div className="grid gap-4 md:grid-cols-[200px_1fr] lg:grid-cols-[300px_1fr] items-start">
             <div className="flex items-start space-x-4">
@@ -149,6 +154,7 @@ export default function JobPostMain({
         isOpen={isOpen}
         onClose={onClose}
         handleDelete={confirmDelete}
+        subject={"job posting"}
       />
     </>
   );

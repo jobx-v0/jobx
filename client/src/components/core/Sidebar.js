@@ -1,17 +1,32 @@
 import { MoreVertical, ChevronLast, ChevronFirst } from "lucide-react";
 import { useContext, createContext, useState } from "react";
+import logo from "../../images/logo1.png";
+import { useAuth } from "../../context/AuthContext"; // Import the AuthContext
+import { user } from "@nextui-org/react";
 
 const SidebarContext = createContext();
 
 export function Sidebar({ children }) {
   const [expanded, setExpanded] = useState(true);
 
+  const userInfo = useAuth().userInfo; // Get the userInfo object from the AuthContext
+
+  const isLoggedIn = userInfo !== null; // Check if the user is logged in
+  const userName = userInfo?.username; // Get the user's name from the userInfo object
+  const userEmail = userInfo?.email; // Get the user's email from the userInfo object
+
+  const userAvatarURL =
+    "https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true&&" +
+    `name=${userName}`; // Create a user avatar using the user component
+
+  // Rest of the code...
+
   return (
     <aside className="h-screen">
       <nav className="h-full flex flex-col bg-white border-r shadow-sm">
         <div className="p-4 pb-2 flex justify-between items-center">
           <img
-            src="https://img.logoipsum.com/243.svg"
+            src={logo}
             className={`overflow-hidden transition-all ${
               expanded ? "w-32" : "w-0"
             }`}
@@ -30,23 +45,33 @@ export function Sidebar({ children }) {
         </SidebarContext.Provider>
 
         <div className="border-t flex p-3">
-          <img
-            src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"
-            alt=""
-            className="w-10 h-10 rounded-md"
-          />
-          <div
-            className={`
-              flex justify-between items-center
-              overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}
-          `}
-          >
-            <div className="leading-4">
-              <h4 className="font-semibold">John Doe</h4>
-              <span className="text-xs text-gray-600">johndoe@gmail.com</span>
-            </div>
-            <MoreVertical size={20} />
-          </div>
+          {isLoggedIn ? (
+            <>
+              <img
+                src={userAvatarURL}
+                alt=""
+                className="w-10 h-10 rounded-md"
+              />
+              <div
+                className={`
+                  flex justify-between items-center
+                  overflow-hidden transition-all ${
+                    expanded ? "w-52 ml-3" : "w-0"
+                  }
+              `}
+              >
+                <div className="leading-4">
+                  <h4 className="font-semibold">{userName}</h4>
+                  <span className="text-xs text-gray-600">{userEmail}</span>
+                </div>
+                <MoreVertical size={20} />
+              </div>
+            </>
+          ) : (
+            <a href="/login" className="text-indigo-600 hover:underline">
+              Not logged in, Login here
+            </a>
+          )}
         </div>
       </nav>
     </aside>
@@ -68,7 +93,7 @@ export function SidebarItem({ icon, text, active, alert, onClick }) {
             : "hover:bg-indigo-50 text-gray-600"
         }
     `}
-    onClick={onClick}
+      onClick={onClick}
     >
       {icon}
       <span

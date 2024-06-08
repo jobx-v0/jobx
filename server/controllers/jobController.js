@@ -17,7 +17,7 @@ const createJob = async (req, res) => {
     // If the job does not already exist, create a new job posting
     const newJob = new Job(req.body);
     await newJob.save();
-    console.log("New Job Added Successfully")
+    console.log("New Job Added Successfully");
 
     res.status(201).json({ message: "Job posting created successfully." });
   } catch (error) {
@@ -28,16 +28,48 @@ const createJob = async (req, res) => {
   }
 };
 
-// Controller function to get all job postings
+// Controller function to get all job postings with pagination
 const getAllJobs = async (req, res) => {
   try {
-    const jobs = await Job.find();
-    res.json(jobs);
+    const { search, page, limit } = req.query;
+    let query = {};
+
+    // If search query is provided, construct a regex pattern for case-insensitive search
+    if (search) {
+      const regex = new RegExp(search, "i");
+      query = {
+        $or: [
+          { title: { $regex: regex } },
+          { description: { $regex: regex } },
+          { company_name: { $regex: regex } },
+        ],
+      };
+    }
+
+    // Set default values for page and limit
+    const pageNumber = parseInt(page) || 1;
+    let pageSize = parseInt(limit) || 10;
+
+    // Calculate the skip value based on the page number and limit
+    const skip = (pageNumber - 1) * pageSize;
+
+    // Fetch jobs from the database based on the search query and pagination
+    const jobs = search
+      ? await Job.find(query).skip(skip).limit(pageSize)
+      : await Job.find().skip(skip).limit(pageSize);
+
+    // Calculate the total number of jobs matching the search query
+    const totalJobs = search
+      ? await Job.countDocuments(query)
+      : await Job.countDocuments();
+
+    // Calculate the total number of pages based on the total number of jobs and page size
+    const totalPages = Math.ceil(totalJobs / pageSize);
+
+    res.status(200).json({ jobs, pageNumber, pageSize, totalPages });
   } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({ message: "Failed to retrieve job postings. Please try again." });
+    console.error("Error fetching jobs:", error);
+    res.status(500).json({ message: "Failed to fetch jobs" });
   }
 };
 
@@ -82,7 +114,7 @@ const deleteJobById = async (req, res) => {
     if (!deletedJob) {
       return res.status(404).json({ message: "Job posting not found." });
     }
-    console.log("Deleted Job successfully")
+    console.log("Deleted Job successfully");
     res.json({ message: "Job posting deleted successfully." });
   } catch (error) {
     console.error(error);

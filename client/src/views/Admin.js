@@ -1,11 +1,11 @@
 import Nav from "../components/core/Nav";
-import { Settings2, SearchX, CookieIcon } from "lucide-react";
+import { Settings2, SearchCheck, ChevronUpCircleIcon } from "lucide-react";
 import { Sidebar, SidebarItem } from "../components/core/Sidebar";
 import { useState } from "react";
 import {
   ConfigurationsMain,
-  InterviewQuestionsMain,
 } from "../components/core/SidebarMainArea";
+import InterviewQuestionsMain from "../components/core/InterviewQuestionsMain";
 import JobsMain from "../components/core/JobsMain";
 
 export default function AdminPage() {
@@ -22,13 +22,13 @@ export default function AdminPage() {
             onClick={() => setActiveSection("Configurations")}
           />
           <SidebarItem
-            icon={<SearchX />}
+            icon={<SearchCheck />}
             text="Jobs"
             active={activeSection === "Jobs"}
             onClick={() => setActiveSection("Jobs")}
           />
           <SidebarItem
-            icon={<CookieIcon />}
+            icon={<ChevronUpCircleIcon />}
             text="Interview Questions"
             active={activeSection === "Interview Questions"}
             onClick={() => setActiveSection("Interview Questions")}

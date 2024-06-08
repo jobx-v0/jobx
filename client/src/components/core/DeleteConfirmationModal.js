@@ -12,6 +12,7 @@ export default function DeleteConfirmationModel({
   onOpen,
   onClose,
   handleDelete,
+  subject
 }) {
   return (
     <>
@@ -26,7 +27,7 @@ export default function DeleteConfirmationModel({
           <div className="w-[30rem]">
             <ModalHeader className="pb-0 text-center">
               <p className="text-slate-600">
-                Are you sure you want to delete the job posting?
+                Are you sure you want to delete the {`${subject}`}?
               </p>
             </ModalHeader>
             <ModalFooter className="flex">
