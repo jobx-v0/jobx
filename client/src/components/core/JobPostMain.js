@@ -122,7 +122,7 @@ export default function JobPostMain({
                       Top Skills
                     </h4>
                     {skills.map((skill, index) => (
-                      <SkillTag key={index} skill={skill} />
+                      <SkillTag key={index} skill={skill.name} />
                     ))}
                   </>
                 )}

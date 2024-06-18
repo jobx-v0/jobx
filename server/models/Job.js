@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
+const Skill = require("./Skill");
 
 const jobSchema = new Schema({
   title: {
@@ -25,9 +26,11 @@ const jobSchema = new Schema({
   location: {
     type: String,
   },
-  skills_required: {
-    type: [String],
-  },
+  skills_required: [
+    {
+      type: Skill.schema, // Use the schema from the imported Skill model
+    },
+  ],
   experience_required: {
     type: Number,
   },

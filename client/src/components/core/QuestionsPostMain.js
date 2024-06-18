@@ -64,10 +64,10 @@ export default function QuestionPostMain({
               {skills?.length > 0 && (
                 <>
                   <h4 className="text-lg text-black font-semibold tracking-tight">
-                    Skills
+                    Skills Required
                   </h4>
                   {skills.map((skill, index) => (
-                    <SkillTag key={index} skill={skill} />
+                    <SkillTag key={index} skill={skill.name} />
                   ))}
                 </>
               )}
