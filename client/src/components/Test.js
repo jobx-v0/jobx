@@ -56,7 +56,7 @@ const LandingPage = () => {
               </h1>
               <nav className="space-x-4">
                 <a
-                  href="#"
+                  href="/employers"
                   className="hover:text-[var(--color-primary)] transition"
                 >
                   For Employers

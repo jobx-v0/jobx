@@ -15,6 +15,7 @@ import Jobs from "./views/Jobs";
 import VideoRecorder from "./components/VideoRecorder";
 import NewInterview from "./views/NewInterview";
 import NewLandingPage from "./views/NewLanding";
+import EmployerPage from "./views/EmployerPage";
 import LandingPage from "./components/Test";
 // import ColorPaletteProvider from './components/ColorPaletteProvider';
 
@@ -36,6 +37,7 @@ function App() {
             <Route path="/thank-you" element={<ThankYouPage />} />
             <Route path="/new-interview" element={<NewInterview />} />
             <Route path="/new-landing" element={<NewLandingPage />} />
+            <Route path="/employers" element={<EmployerPage />} />
           </Routes>
         </BrowserRouter>
       </NextUIProvider>
