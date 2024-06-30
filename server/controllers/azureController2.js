@@ -38,6 +38,7 @@ const generateSasToken = async (req, res) => {
   const { userId, jobId, questionId } = req.params;
   try {
     const sasUrl = await AzureService.generateSasTokenForBlob(
+      userId,
       `${userId}/${jobId}/${questionId}.webm`
     );
     res.json({ sasUrl });
@@ -55,11 +56,9 @@ const downloadAudio = async (req, res) => {
   }
 };
 
-const AzureController = {
+module.exports = {
   generateSasToken,
   handleTranscriptionForOneQuestion,
   handleTranscriptionForAllQuestions,
   downloadAudio,
 };
-
-module.exports = AzureController;

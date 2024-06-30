@@ -36,8 +36,6 @@ register = async (req, res) => {
       email,
     });
 
-    console.log("new user", newUser);
-
     // Save the user document to the database
     await newUser.save();
     console.log("New User Saved");

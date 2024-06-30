@@ -2,7 +2,10 @@ import { Button } from "@nextui-org/react";
 import { Locate, Luggage, Crown, Trash2, Pencil } from "lucide-react";
 import { useDisclosure } from "@nextui-org/react";
 import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import DeleteConfirmationModel from "./DeleteConfirmationModal";
+import StartInterviewModal from "../home/StartInterviewModal";
+import NewInterview from "../../views/NewInterview";
 
 const SkillTag = ({ skill }) => {
   return (
@@ -26,12 +29,26 @@ export default function JobPostMain({
   handleDelete,
   handleEdit,
 }) {
+  const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { userInfo } = useAuth();
 
   const confirmDelete = () => {
     handleDelete(id);
     onClose();
+  };
+
+  const handleClick = (e) => {
+    e.preventDefault();
+
+    // Check if the user has remaining attempts
+    // if (remainingAttempts <= 0) {
+    //   alert("You have reached the maximum number of interview attempts.");
+    //   return;
+    // }
+
+    console.log("Interview Started");
+    navigate("/new-interview", { state: { jobId: id } });
   };
 
   return (
@@ -138,14 +155,15 @@ export default function JobPostMain({
                 Apply Now
               </Button>
               {/* Render Start Interview button */}
-              <Button
+              {/* <Button
                 className="ml-auto mt-10 text-white bg-indigo-800"
                 size="lg"
                 radius="full"
                 variant="bordered"
               >
-                Start Interview
-              </Button>
+                Hell with Interview
+              </Button> */}
+              <StartInterviewModal handleClick={handleClick} />
             </div>
           </div>
         </div>

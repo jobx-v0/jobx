@@ -1,6 +1,9 @@
 const Interview = require("../models/Interview"); // Import the Interview model
 const MAX_ATTEMPTS = process.env.MAX_ATTEMPTS || 5; // Default to 5 if not specified in .env
 const Question = require("../models/Question");
+const InterviewService = require("../services/interviewService");
+const AzureService = require("../services/azureService");
+const OpenAIService = require("../services/openAIService");
 
 // Only for local mongo DB connection for testing
 // const Questions = [
@@ -26,51 +29,96 @@ const getQuestions = async (req, res) => {
   }
 };
 
-// Function to store interview data
-const postInterview = async (req, res) => {
+const submitInterview = async (req, res) => {
+  const { userId, jobId } = req.body;
   try {
-    const userId = req.user.id;
-    const { interview } = req.body;
+    // Trigger async processes
+    triggerAsyncProcessing(userId, jobId);
 
-    // Find existing interview data for the user
-    let userInterview = await Interview.findOne({ user_id: userId });
-
-    // Check if the user has reached the maximum number of attempts
-    if (userInterview && userInterview.interviews.length >= MAX_ATTEMPTS) {
-      return res
-        .status(403)
-        .json({ message: "Maximum number of attempts reached." });
-    }
-
-    // Create a new interview attempt
-    const newAttempt = {
-      interview,
-      attempt_number: userInterview ? userInterview.interviews.length + 1 : 1,
-    };
-
-    // If no existing interview data, create new record
-    if (!userInterview) {
-      userInterview = new Interview({
-        user_id: userId,
-        interviews: [newAttempt],
-      });
-    } else {
-      // Add new attempt to existing interview data
-      userInterview.interviews.push(newAttempt);
-    }
-
-    // Save the interview data
-    await userInterview.save();
-    console.log(
-      "Interview data stored successfully for Interview number: ",
-      newAttempt.attempt_number
-    );
-    res.status(201).json({ message: "Interview data stored successfully." });
+    res.status(200).json({ message: "Interview submitted successfully" });
   } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({ message: "Failed to store interview data. Please try again." });
+    console.error("Error in interview submission:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const triggerAsyncProcessing = async (userId, jobId) => {
+  try {
+    console.log(
+      `Starting async processing for user ${userId} and job ${jobId}`
+    );
+
+    console.log("Processing videos...");
+    await AzureService.processVideoForAllQuestions(userId, jobId);
+
+    console.log("Evaluating transcriptions...");
+    await OpenAIService.evaluateTranscriptionForAllQuestions(userId, jobId);
+
+    console.log("Async processing completed successfully");
+  } catch (error) {
+    console.error("Error in async processing:", error);
+    // Rethrow the error to be caught by the caller
+    throw new Error(`Async processing failed: ${error.message}`);
+  }
+};
+
+const updateAnswer = async (req, res) => {
+  const { user_id, job_id, question_id, transcription } = req.body;
+  try {
+    await InterviewService.updateAnswer(
+      user_id,
+      job_id,
+      question_id,
+      transcription
+    );
+    res.status(200).json({ message: "Answer updated successfully." });
+  } catch (error) {
+    console.error("Error updating answer:", error);
+    switch (error.message) {
+      case "Interview not found":
+      case "Question not found":
+        res.status(404).json({ message: error.message });
+        break;
+      case "Answer already exists":
+        res
+          .status(409)
+          .json({ message: "Answer already exists and cannot be updated." });
+        break;
+      default:
+        res
+          .status(500)
+          .json({ message: "Failed to update answer. Please try again." });
+    }
+  }
+};
+
+const createInterview = async (req, res) => {
+  const { user_id, job_id, question_ids } = req.body;
+
+  try {
+    await InterviewService.checkExistingInterview(user_id, job_id);
+
+    const data = InterviewService.createInterviewData(question_ids);
+    console.log("data: ", data);
+    const interview = await InterviewService.saveInterview(
+      user_id,
+      job_id,
+      data
+    );
+
+    res.status(201).json({
+      message: "Interview created successfully",
+      interview,
+    });
+  } catch (error) {
+    console.error("Error creating interview:", error);
+    if (error.message === "Interview already exists for this user and job") {
+      res.status(400).json({ message: error.message });
+    } else {
+      res
+        .status(500)
+        .json({ message: "Error creating interview", error: error.message });
+    }
   }
 };
 
@@ -95,8 +143,10 @@ const getCurrentCountOfInterviews = async (req, res) => {
 
 const InterviewController = {
   getQuestions,
-  postInterview,
+  submitInterview,
   getCurrentCountOfInterviews,
+  createInterview,
+  updateAnswer,
 };
 
 module.exports = InterviewController;

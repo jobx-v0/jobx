@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
   fetchQuestions,
+  createInterview,
   submitInterview,
-  evaluateInterview,
 } from "../api/interviewApi";
 import QuestionDisplay from "../components/interview/QuestionDisplay";
 import QuestionCategoryModal from "../components/interview/QuestionTypeModal";
@@ -17,13 +17,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faCheck } from "@fortawesome/free-solid-svg-icons";
 import "../components/interview/interview.css";
 import VideoRecorder from "../components/VideoRecorder";
+import { useLocation } from "react-router-dom";
 
 const InterviewPage = () => {
   var { authToken, setToken, userInfo, fetchUserInfo } = useAuth();
-  const [questions, setQuestions] = useState({});
-  const [questionIds, setQuestionIds] = useState([]);
+  const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [userAnswers, setUserAnswers] = useState([]);
+  // const [userAnswers, setUserAnswers] = useState([]);
+  const hasFetchedQuestions = useRef(false);
+  const hasCreatedInterview = useRef(false);
   const navigate = useNavigate();
   const [isQuestionPrevMoved, setQuestionPrevMoved] = useState(false);
   const {
@@ -32,13 +34,30 @@ const InterviewPage = () => {
     onClose: onCloseSubmitModal,
   } = useDisclosure();
   const [isTimerActive, setIsTimerActive] = useState(true);
+  const location = useLocation();
+  const { jobId } = location.state || {};
 
   const handleTimerActiveChange = (newTimerActiveValue) => {
     setIsTimerActive(newTimerActiveValue);
   };
 
+  const fetchQuestionsData = (token) => {
+    fetchQuestions(token)
+      .then((response) => {
+        const questionsResponse = response.data.Questions;
+        setQuestions(questionsResponse);
+        // setUserAnswers(Array(questionsResponse.length).fill(""));
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching questions:", error);
+        navigate("/login");
+      });
+  };
+
   useEffect(() => {
     console.log("inside useeffect interview");
+    console.log("jobId: ", jobId);
     // If there is no authToken in the context, retrieve it from localStorage
     const storedAuthToken = localStorage.getItem("authToken");
     if (storedAuthToken) {
@@ -47,29 +66,34 @@ const InterviewPage = () => {
       fetchUserInfo(storedAuthToken);
 
       // Fetch questions from the backend when the component mounts
-      fetchQuestions(storedAuthToken)
-        .then((response) => {
-          const questionsResponse = response.data.Questions;
-          // store the ids in questionIds
-          questionsResponse.map((question) => {
-            setQuestionIds((questionIds) => [...questionIds, question._id]);
-          });
-
-          setQuestions(questionsResponse);
-          setUserAnswers(Array(questionsResponse.length).fill(""));
-          console.log(response.data);
-        })
-        .catch((error) => {
-          // Handle errors, such as redirecting on authorization failure
-          console.error("Error fetching questions:", error);
-          navigate("/login");
-        });
+      if (!hasFetchedQuestions.current) {
+        hasFetchedQuestions.current = true;
+        fetchQuestionsData(storedAuthToken);
+      }
     } else {
       // Redirect to login if no authToken found
       navigate("/login");
       return;
     }
   }, []);
+
+  useEffect(() => {
+    if (
+      authToken &&
+      userInfo._id &&
+      jobId &&
+      questions.length > 0 &&
+      !hasCreatedInterview.current
+    ) {
+      hasCreatedInterview.current = true;
+      let questionIds = questions.map((question) => question._id);
+      createInterview(authToken, userInfo._id, jobId, questionIds).catch(
+        (error) => {
+          console.error("Error creating interview:", error);
+        }
+      );
+    }
+  }, [authToken, userInfo._id, jobId, questions.length]);
 
   const handleNextQuestion = () => {
     console.log("Next button clicked: ", currentQuestionIndex);
@@ -81,38 +105,14 @@ const InterviewPage = () => {
 
   const handleSubmit = () => {
     console.log("Submit button clicked");
-
-    // Construct the interview data
-    const interviewData = questions.map((questionObj, index) => ({
-      question: questionObj.question,
-      answer: userAnswers[index],
-    }));
-
-    // Send a POST request to the backend to store the interview data
-    submitInterview(authToken, interviewData)
+    submitInterview(authToken, userInfo._id, jobId)
       .then((response) => {
-        console.log("Interview data submitted successfully:", response);
+        console.log("Interview submitted successfully:", response);
         navigate("/thank-you");
       })
       .catch((error) => {
-        console.error("Error submitting interview data:", error);
-        // Handle the error, such as displaying an error message
-      });
-
-    // Call evaluate API with chatGPT
-    evaluateInterview(authToken)
-      .then((response) => {
-        console.log("Evaluation from Chat-GPT: ", response);
-      })
-      .catch((error) => {
-        if (error.response && error.response.status === 404) {
-          console.log("Evaluation feature is currently disabled.");
-          // Optionally redirect or display a message to the user
-          // TODO: Display a notification bar
-        } else {
-          console.error("Error during evaluation:", error);
-          // Handle other types of errors
-        }
+        console.error("Error submitting interview:", error);
+        // Handle error (e.g., show error message to user)
       });
   };
 
@@ -162,7 +162,13 @@ const InterviewPage = () => {
         />
 
         <VideoRecorder
-          questionId={questionIds[currentQuestionIndex]}
+          questionId={
+            questions[currentQuestionIndex] &&
+            questions[currentQuestionIndex]._id
+              ? questions[currentQuestionIndex]._id
+              : ""
+          }
+          jobId={jobId}
           onTimerActiveChange={handleTimerActiveChange}
           userId={userInfo._id}
         />

@@ -3,6 +3,10 @@ const router = express.Router();
 const openAIController = require("../controllers/openAIController");
 
 router.post("/moderate", openAIController.moderateContent);
-router.post("/evaluate", openAIController.evaluateTranscription);
+router.post(
+  "/evaluateForOneQuestion",
+  openAIController.evaluateTranscriptionForEachQuestion
+);
+router.post("/evaluate", openAIController.evaluateTranscriptionForAllQuestions);
 
 module.exports = router;

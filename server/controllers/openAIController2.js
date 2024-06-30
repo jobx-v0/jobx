@@ -1,5 +1,4 @@
 const OpenAIService = require("../services/openAIService");
-const InterviewService = require("../services/interviewService");
 
 const handleError = (res, error) => {
   console.error("Error:", error);

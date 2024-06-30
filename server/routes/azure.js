@@ -5,10 +5,12 @@ const AzureController = require("../controllers/azureController");
 
 router.get("/sas/:userId/:jobId/:questionId", AzureController.generateSasToken);
 
-router.get(
-  "/transcribe/:userId/:jobId/:questionId",
-  AzureController.handleTranscription
+router.post(
+  "/transcribeForOneQuestion",
+  AzureController.handleTranscriptionForOneQuestion
 );
+
+router.post("/transcribe", AzureController.handleTranscriptionForAllQuestions);
 
 router.get("/audio/download", AzureController.downloadAudio);
 
