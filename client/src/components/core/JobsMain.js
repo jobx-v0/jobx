@@ -4,7 +4,7 @@ import { fetchJobs, addJob, updateJob, deleteJob } from "../../api/jobApi";
 import JobPostMain from "./JobPostMain";
 import AddJobModal from "./AddJobModal";
 import { useAuth } from "../../context/AuthContext"; // Import the AuthContext
-
+import FormAction from "../FormAction";
 export default function JobsMain() {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -95,8 +95,8 @@ export default function JobsMain() {
   return (
     <>
       <div className="p-6">
-        <h1 className="text-xl font-bold text-black mb-4">All Jobs</h1>
         <div className="flex items-center justify-between mb-4">
+          <h1 className="text-lg font-bold text-gray-600 mb-4">All Jobs</h1>
           <input
             type="text"
             placeholder="Search Jobs..."
@@ -104,18 +104,22 @@ export default function JobsMain() {
             onChange={handleSearchChange}
             className="mr-4 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 w-72" // Increase the width of the search bar by adding 'w-72' class
           />
-          {userInfo?.role === "admin" && (
-            <Button
-              onPress={onOpen}
-              className="text-white bg-indigo-800"
-              size="lg"
-              radius="full"
-              variant="bordered"
-            >
-              Add Job
-            </Button>
-          )}
         </div>
+          {userInfo?.role === "admin" && (
+            // <Button
+            //   onPress={onOpen}
+            //   className="text-white bg-indigo-800"
+            //   size="lg"
+            //   radius="full"
+            //   variant="bordered"
+            // >
+            //   Add Job
+            // </Button>
+            <div className="flex justify-end mb-2 px-4 ">
+              <FormAction handleClick={onOpen} text="Add Job" width="auto" padding = '10px 20px' />
+            </div>
+          )}
+        
 
         {loading ? (
           <p>Loading...</p>
@@ -141,28 +145,11 @@ export default function JobsMain() {
           <p>No jobs found.</p>
         )}
         {totalPages != 0 && (
-          <div className="pagination-buttons flex justify-between">
-            <Button
-              disabled={currentPage === 1}
-              onClick={handleLoadPrevPage}
-              className="text-white bg-indigo-800"
-              size="lg"
-              radius="full"
-              variant="bordered"
-            >
-              Previous Page
-            </Button>
+            <div className="pagination-buttons flex justify-between">
+    
+            <FormAction handleClick={handleLoadPrevPage} disabled={currentPage === 1} text="Previous page" width="auto" padding = '10px 20px' />
             <span>{`Page ${currentPage} of ${totalPages}`}</span>
-            <Button
-              disabled={currentPage === totalPages}
-              onClick={handleLoadNextPage}
-              className="text-white bg-indigo-800"
-              size="lg"
-              radius="full"
-              variant="bordered"
-            >
-              Next Page
-            </Button>
+            <FormAction handleClick={handleLoadNextPage} disabled={currentPage === totalPages} text="Next page" width="auto" padding = '10px 20px' />
           </div>
         )}
 

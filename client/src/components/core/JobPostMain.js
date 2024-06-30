@@ -6,10 +6,12 @@ import { useNavigate } from "react-router-dom";
 import DeleteConfirmationModel from "./DeleteConfirmationModal";
 import StartInterviewModal from "../home/StartInterviewModal";
 import NewInterview from "../../views/NewInterview";
+import FormAction from "../FormAction";
+import {Chip} from "@nextui-org/chip";
 
 const SkillTag = ({ skill }) => {
   return (
-    <div className="inline-block rounded-full bg-gray-200 px-4 py-2 mr-2 hover:bg-gray-300 cursor-pointer">
+    <div className="inline-block text-sm  rounded-medium border-1 border-gray-200 bg-zinc-0 px-3 py-1 mr-2  cursor-pointer">
       <span className="text-gray-500">{skill}</span>
     </div>
   );
@@ -53,120 +55,111 @@ export default function JobPostMain({
 
   return (
     <>
-      <div className="relative bg-gray-100 shadow-md rounded-3xl p-6 my-5">
-        {/* Render delete icon */}
-        {userInfo?.role === "admin" && (
-          <>
-            <div className="absolute top-2 right-2">
-              <Trash2
-                className="text-red-500 cursor-pointer"
-                onClick={onOpen}
-              />
-            </div>
-            <div className="absolute top-2 right-10">
-              <Pencil
-                className="text-blue-500 cursor-pointer"
-                onClick={() => handleEdit(id)}
-              />
-            </div>
-          </>
-        )}
-        <div className="container px-4 md:px-6">
-          <div className="grid gap-4 md:grid-cols-[200px_1fr] lg:grid-cols-[300px_1fr] items-start">
+      <div className="relative bg-none shadow-lg rounded-lg border-1 border-gray-100 p-4 my-5">
+        
+        <div className="container px-2">
+          {/* <div className="grid gap-4 md:grid-cols-[200px_1fr] lg:grid-cols-[300px_1fr] items-start"> */}
+          <div className="flex items-center justify-between">  
             <div className="flex items-start space-x-4">
               {/* Render company logo if provided */}
               <img
-                alt="Company logo"
+                alt="&nbsp;logo"
                 className="rounded-lg object-cover aspect-square border"
-                height="80"
+                height="60" width="60"
                 src={companyLogoUrl}
-                width="80"
+                onerror="this.onerror=null; this.src='path/to/fallback-icon.png';"
               />
-              <div className="space-y-2.5">
+              <div className="">
                 {/* Render title if provided */}
                 {title && (
-                  <h3 className="text-2xl text-black font-bold tracking-tighter">
+                  <h3 className="text-lg text-indigo-500 font-bold tracking-tighter">
                     {title}
                   </h3>
                 )}
                 {/* Render company if provided */}
-                {company && <p className="text-gray-500">{company}</p>}
+                {company && <p className="font-semibold text-gray-500 py-0 mt-0">{company}</p>}
               </div>
             </div>
-            <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              {/* Render Apply Now button */}
+              <FormAction handleClick={() => window.open(jobLink, "_blank")} text="Apply Now" width="auto" padding = '10px 20px' />
+              &nbsp; &nbsp; 
+              {/* <StartInterviewModal handleClick={handleClick} /> */}
+            </div>
+          </div>
+            <div className="space-y-1">
               {/* Render description if provided */}
               {description && (
                 <div className="grid gap-0.5 items-start">
-                  <h4 className="text-xl text-black font-semibold tracking-tighter">
+                  <h4 className="text-md text-indigo-500 font-semibold tracking-tighter mt-3">
                     Description
                   </h4>
                   <p className="text-gray-500 leading-7">{description}</p>
                 </div>
               )}
               {/* Render location, employment type, and years of experience if provided */}
-              <div className="flex items-center justify-evenly">
+              <div className="flex items-center justify-start">
                 {location && (
-                  <div className="flex items-center">
-                    <Locate className="w-4 h-4 mr-1 text-black" />
-                    <span className="text-gray-500">{location}</span>
+                  <div className="flex items-center mr-5 text-sm font-semibold text-indigo-500">
+                    <Locate className="w-3.5 h-3.5 mr-1 " />
+                    {location}
                   </div>
                 )}
                 {employmentType && (
-                  <div className="flex items-center">
-                    <Luggage className="w-4 h-4 mr-1 text-black" />
-                    <span className="text-gray-500">{employmentType}</span>
+                  <div className="flex items-center mr-5 text-sm font-semibold text-indigo-500">
+                    <Luggage className="w-3.5 h-3.5 mr-1 " />
+                    {employmentType}
                   </div>
                 )}
                 {yearsOfExperience !== undefined && (
-                  <div className="flex items-center">
-                    <Crown className="w-4 h-4 mr-1 text-black" />
-                    <span className="text-gray-500">
-                      {yearsOfExperience} Years Exp
-                    </span>
+                  <div className="flex items-center mr-5 text-sm font-semibold text-indigo-500">
+                    <Crown className="w-3.5 h-3.5 mr-1 " />
+                    {yearsOfExperience} years
                   </div>
                 )}
               </div>
             </div>
-          </div>
-        </div>
-        <div className="container px-4 md:px-6">
-          <div className="container px-4 md:px-6">
-            <div className="flex items-center space-x-4">
-              <div className="space-y-4 flex-1">
-                {skills?.length > 0 && (
-                  <>
-                    <h4 className="text-lg text-black font-semibold tracking-tight">
-                      Top Skills
-                    </h4>
-                    {skills.map((skill, index) => (
-                      <SkillTag key={index} skill={skill} />
-                    ))}
-                  </>
-                )}
-              </div>
-              {/* Render Apply Now button */}
-              <Button
-                className="ml-auto mt-10 text-white bg-indigo-800"
-                size="lg"
-                radius="full"
-                variant="bordered"
-                onClick={() => window.open(jobLink, "_blank")}
+        
+            {skills?.length > 0 && (
+              <div class="flex justify-start align-middle my-2">
+                <h4 className="text-sm text-gray-500 font-semibold tracking-tight mr-3 mt-1">
+                  Top skills
+                </h4>
+                {skills.map((skill, index) => (
+                  <SkillTag key={index} skill={skill} />
+                ))}
+              </div >
+            )}
+
+            {/* Render delete icon */}
+          {userInfo?.role === "admin" && (
+            <div className="flex justify-end">
+              <Chip startContent= {<Pencil size={15} />} color="primary" variant="bordered"
+                classNames={{
+                  base: "border-1 border-indigo-500 px-3 cursor-pointer",
+                  content: "font-medium text-indigo-500",
+                }}
+                onClick={() => handleEdit(id)}
               >
-                Apply Now
-              </Button>
-              {/* Render Start Interview button */}
-              {/* <Button
-                className="ml-auto mt-10 text-white bg-indigo-800"
-                size="lg"
-                radius="full"
-                variant="bordered"
+                Edit
+              </Chip>
+              &nbsp; &nbsp;
+              <Chip startContent= {<Trash2 size={15} />} color="danger" variant="bordered"
+              classNames={{
+                base: "border-1  px-3 cursor-pointer",
+                content: "font-medium ",
+              }}
+              onClick={onOpen}
               >
-                Hell with Interview
-              </Button> */}
-              <StartInterviewModal handleClick={handleClick} />
+                Delete
+              </Chip>
+
             </div>
-          </div>
+          )}
+            
         </div>
+       
+          
       </div>
       <DeleteConfirmationModel
         isOpen={isOpen}

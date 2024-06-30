@@ -9,7 +9,7 @@ export function ConfigurationsMain() {
 
   return (
     <div className="p-6">
-      <h1 className="text-xl font-bold text-black mb-4">Configurations</h1>
+      <h1 className="text-md font-bold mb-4 text-gray-600">Admin Configurations</h1>
       <Switch
         checked={chatGPTEnabled}
         onChange={(val) => setChatGPTEnabled(val)}

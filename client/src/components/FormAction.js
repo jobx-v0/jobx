@@ -10,7 +10,9 @@ export default function FormAction({
     fontWeight = 'bold',
     fontSize = '0.85rem',
     text,
-    loading=false
+    width = '100%',
+    loading=false,
+    disabled=false
 }) {
     return (
         <>
@@ -19,9 +21,10 @@ export default function FormAction({
                     <Button
                         type={action}
                         className={MainBlueButtonCss}
-                        style={{ width: '100%', padding: padding, fontWeight: fontWeight, margin: '0', justifyContent: 'center', fontSize: fontSize, letterSpacing: '0.8px' }}
+                        style={{ width: {width}, padding: padding, fontWeight: fontWeight, margin: '0', justifyContent: 'center', fontSize: fontSize, letterSpacing: '0.8px' }}
                         onClick={handleClick}
                         isLoading={loading}
+                        disabled={disabled}
                     >
                         {text}
                     </Button>

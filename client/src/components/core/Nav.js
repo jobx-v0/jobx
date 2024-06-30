@@ -111,7 +111,7 @@ export default function Nav({ isInterviewPage, isLandingPage = false }) {
               color="foreground"
               className="font-extrabold text-transparent bg-clip-text bg-gradient-to-t from-blue-500 to-indigo-600"
             >
-              JOBX
+              Ruthi
             </p>
           </Link>
         </NavbarBrand>
@@ -133,7 +133,7 @@ export default function Nav({ isInterviewPage, isLandingPage = false }) {
               Home
             </Link>
           </NavbarItem>
-          <Dropdown>
+          {/* <Dropdown>
             <NavbarItem>
               <DropdownTrigger>
                 <Button
@@ -179,14 +179,14 @@ export default function Nav({ isInterviewPage, isLandingPage = false }) {
                 +99% Uptime
               </DropdownItem>
             </DropdownMenu>
-          </Dropdown>
+          </Dropdown> */}
           <NavbarItem>
             <Link
               color="foreground"
-              href="#"
+              href="/employers"
               className="text-sm font-semibold subpixel-antialiased"
             >
-              Resources
+              Employer Portal
             </Link>
           </NavbarItem>
           <NavbarItem>
