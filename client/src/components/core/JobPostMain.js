@@ -11,7 +11,7 @@ import {Chip} from "@nextui-org/chip";
 
 const SkillTag = ({ skill }) => {
   return (
-    <div className="inline-block text-sm  rounded-medium border-1 border-gray-200 bg-zinc-0 px-3 py-1 mr-2  cursor-pointer">
+    <div className="inline-block text-xs  rounded-small border-1 border-gray-300 bg-zinc-0 px-3 py-1 mr-2  cursor-pointer">
       <span className="text-gray-500">{skill}</span>
     </div>
   );
@@ -57,7 +57,7 @@ export default function JobPostMain({
     <>
       <div className="relative bg-none shadow-md rounded-lg border-1 border-gray-100 p-4 my-5">
         
-        <div className="container px-2">
+        <div className="container ">
           {/* <div className="grid gap-4 md:grid-cols-[200px_1fr] lg:grid-cols-[300px_1fr] items-start"> */}
           <div className="flex items-center justify-between">  
             <div className="flex items-start space-x-4">
@@ -72,33 +72,33 @@ export default function JobPostMain({
               <div className="">
                 {/* Render title if provided */}
                 {title && (
-                  <h3 className="text-lg text-indigo-500 font-bold tracking-tighter">
+                  <h3 className="text-md text-indigo-500 font-bold tracking-tighter">
                     {title}
                   </h3>
                 )}
                 {/* Render company if provided */}
-                {company && <p className="font-semibold text-gray-500 py-0 mt-0">{company}</p>}
+                {company && <p className="text-sm font-semibold text-gray-500 py-0 mt-0">{company}</p>}
               </div>
             </div>
             <div className="flex items-center justify-between">
               {/* Render Apply Now button */}
               <FormAction handleClick={() => window.open(jobLink, "_blank")} text="Apply Now" width="auto" padding = '10px 20px' />
-              &nbsp; &nbsp; 
+              
               {/* <StartInterviewModal handleClick={handleClick} /> */}
             </div>
           </div>
-            <div className="space-y-1">
+            <div >
               {/* Render description if provided */}
               {description && (
                 <div className="grid gap-0.5 items-start">
-                  <h4 className="text-md text-indigo-500 font-semibold tracking-tighter mt-3">
+                  <h4 className="text-sm text-indigo-500 font-semibold tracking-tighter mt-3">
                     Description
                   </h4>
-                  <p className="text-gray-500 leading-7">{description}</p>
+                  <p className="text-sm text-gray-500 leading-7">{description}</p>
                 </div>
               )}
               {/* Render location, employment type, and years of experience if provided */}
-              <div className="flex items-center justify-start">
+              <div className="flex items-center justify-start mt-1">
                 {location && (
                   <div className="flex items-center mr-5 text-sm font-semibold text-indigo-500">
                     <Locate className="w-3.5 h-3.5 mr-1 " />
@@ -122,9 +122,6 @@ export default function JobPostMain({
         
             {skills?.length > 0 && (
               <div class="flex justify-start align-middle my-2">
-                <h4 className="text-sm text-gray-500 font-semibold tracking-tight mr-3 mt-1">
-                  Top skills
-                </h4>
                 {skills.map((skill, index) => (
                   <SkillTag key={index} skill={skill} />
                 ))}

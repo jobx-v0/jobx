@@ -37,7 +37,7 @@ export default function QuestionPostMain({
             <Chip startContent= {<Folders size={15} />} color="default" variant="bordered"
                 classNames={{
                   base: "border-1 border-gray-300 rounded-small px-2",
-                  content: "font-medium text-gray-600",
+                  content: "font-medium text-xs text-gray-600",
                 }}
 
               >
@@ -50,7 +50,7 @@ export default function QuestionPostMain({
               <Chip startContent= {<Pencil size={15} />} color="primary" variant="bordered"
                 classNames={{
                   base: "border-1 border-indigo-500 rounded-small px-2 cursor-pointer",
-                  content: "font-medium text-indigo-500",
+                  content: "font-medium text-xs text-indigo-500",
                 }}
                 onClick={() => handleEdit(id)}
               >
@@ -60,7 +60,7 @@ export default function QuestionPostMain({
               <Chip startContent= {<Trash2 size={15} />} color="danger" variant="bordered"
               classNames={{
                 base: "border-1 rounded-small px-2 cursor-pointer",
-                content: "font-medium ",
+                content: "font-medium text-xs",
               }}
               onClick={onOpen}
               >
@@ -72,8 +72,8 @@ export default function QuestionPostMain({
           </div>
 
         </div>
-        <div className="container flex items-start py-3">
-          <p className="text-gray-500">{question}</p>
+        <div className="container flex items-start pt-2">
+          <p className="text-sm text-gray-500">{question}</p>
         </div>
         <div className="container px-4 md:px-6">
           <div className="flex items-center space-x-4">

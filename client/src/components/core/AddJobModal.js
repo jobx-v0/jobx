@@ -95,7 +95,7 @@ const AddJobModal = ({ isOpen, onClose, onAddJob, initialJobData, onUpdateJob })
     >
       <ModalContent>
         <ModalHeader>
-          <h1 className="text-xl font-bold text-black mb-2">
+          <h1 className="text-sm font-semibold text-gray-500 mb-2">
             {initialJobData ? "Edit Job" : "Add Job"}
           </h1>
         </ModalHeader>
