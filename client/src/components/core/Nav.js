@@ -235,7 +235,7 @@ export default function Nav({ isInterviewPage, isLandingPage = false }) {
                       size="sm" // Adjust the size to your preference (e.g., xs, sm, md, lg, xl)
                       classNames={{
                         base: "bg-slate-300",
-                        icon: "text-white/70",
+                        icon: "text-white/70 cursor-pointer",
                       }}
                     />
                   </DropdownTrigger>

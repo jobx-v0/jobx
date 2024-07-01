@@ -1,7 +1,8 @@
-import { Trash2, Pencil } from "lucide-react";
+import { Trash2, Pencil, Folders } from "lucide-react";
 import { useDisclosure } from "@nextui-org/react";
 import { useAuth } from "../../context/AuthContext";
 import DeleteConfirmationModel from "./DeleteConfirmationModal";
+import {Chip} from "@nextui-org/chip";
 
 const SkillTag = ({ skill }) => {
   return (
@@ -30,33 +31,49 @@ export default function QuestionPostMain({
 
   return (
     <>
-      <div className="relative bg-gray-100 shadow-md rounded-3xl p-6 my-5">
-        {/* Render delete icon */}
-        {userInfo?.role === "admin" && (
-          <>
-            <div className="absolute top-2 right-2">
-              <Trash2
-                className="text-red-500 cursor-pointer"
-                onClick={onOpen}
-              />
-            </div>
-            <div className="absolute top-2 right-10">
-              <Pencil
-                className="text-blue-500 cursor-pointer"
-                onClick={() => handleEdit(id)}
-              />
-            </div>
-          </>
-        )}
-        <div className="container px-4 md:px-6 flex items-start py-3">
-          <div className="flex-1">
-            <div className="space-y-2.5">
-              <h3 className="text-xl text-black font-semibold tracking-tighter">
-                {question}
-              </h3>
-              <p className="text-gray-500">{`${category}`}</p>
-            </div>
+      <div className="relative bg-none shadow-md rounded-lg border-1 border-gray-100 p-4 my-5">
+        <div className="flex justify-between">
+          <div>
+            <Chip startContent= {<Folders size={15} />} color="default" variant="bordered"
+                classNames={{
+                  base: "border-1 border-gray-300 rounded-small px-2",
+                  content: "font-medium text-gray-600",
+                }}
+
+              >
+                {category}
+            </Chip>
           </div>
+          <div>
+            {userInfo?.role === "admin" && (
+            <div className="flex justify-end">
+              <Chip startContent= {<Pencil size={15} />} color="primary" variant="bordered"
+                classNames={{
+                  base: "border-1 border-indigo-500 rounded-small px-2 cursor-pointer",
+                  content: "font-medium text-indigo-500",
+                }}
+                onClick={() => handleEdit(id)}
+              >
+                Edit
+              </Chip>
+              &nbsp; &nbsp;
+              <Chip startContent= {<Trash2 size={15} />} color="danger" variant="bordered"
+              classNames={{
+                base: "border-1 rounded-small px-2 cursor-pointer",
+                content: "font-medium ",
+              }}
+              onClick={onOpen}
+              >
+                Delete
+              </Chip>
+
+            </div>
+          )}
+          </div>
+
+        </div>
+        <div className="container flex items-start py-3">
+          <p className="text-gray-500">{question}</p>
         </div>
         <div className="container px-4 md:px-6">
           <div className="flex items-center space-x-4">

@@ -9,6 +9,7 @@ import {
 import QuestionPostMain from "./QuestionsPostMain"; // Create a similar component for displaying interview questions
 import AddQuestionModal from "./AddQuestionModal"; // Create a similar modal component for adding/editing questions
 import { useAuth } from "../../context/AuthContext"; // Import the AuthContext
+import FormAction from "../FormAction";
 
 export default function InterviewQuestionsMain() {
   const [questions, setQuestions] = useState([]);
@@ -113,29 +114,23 @@ export default function InterviewQuestionsMain() {
   return (
     <>
       <div className="p-6">
-        <h1 className="text-xl font-bold text-black mb-4">
-          All Interview Questions
-        </h1>
         <div className="flex items-center justify-between mb-4">
-          <input
+        <h1 className="text-md font-bold mb-4 text-gray-600 mt-1">All Interview Questions</h1>
+        <input
             type="text"
             placeholder="Search Questions..."
             value={searchQuery}
             onChange={handleSearchChange}
             className="ml-4 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 w-72" // Increase the width of the search bar by adding 'w-72' class
           />
-          {userInfo?.role === "admin" && (
-            <Button
-              onPress={onOpen}
-              className="ml-auto text-white bg-indigo-800"
-              size="lg"
-              radius="full"
-              variant="bordered"
-            >
-              Add Question
-            </Button>
-          )}
         </div>
+        {userInfo?.role === "admin" && (
+          <div className="flex justify-end mb-2  ">
+            <FormAction handleClick={onOpen} text="Add Question" width="auto" padding = '10px 20px' />
+          </div>
+        )}
+
+        
 
         <AddQuestionModal
           isOpen={isOpen}
@@ -161,31 +156,15 @@ export default function InterviewQuestionsMain() {
                 handleEdit={userInfo?.role === "admin" ? handleEdit : null}
               />
             ))}
-            {totalPages != 0 && (
+
+            {totalPages > 1 && (
               <div className="pagination-buttons flex justify-between">
-                <Button
-                  disabled={currentPage === 1}
-                  onClick={handleLoadPrevPage}
-                  className="text-white bg-indigo-800"
-                  size="lg"
-                  radius="full"
-                  variant="bordered"
-                >
-                  Previous Page
-                </Button>
+                <FormAction handleClick={handleLoadPrevPage} disabled={currentPage === 1} text="Previous page" width="auto" padding = '10px 20px' />
                 <span>{`Page ${currentPage} of ${totalPages}`}</span>
-                <Button
-                  disabled={currentPage === totalPages}
-                  onClick={handleLoadNextPage}
-                  className="text-white bg-indigo-800"
-                  size="lg"
-                  radius="full"
-                  variant="bordered"
-                >
-                  Next Page
-                </Button>
+                <FormAction handleClick={handleLoadNextPage} disabled={currentPage === totalPages} text="Next page" width="auto" padding = '10px 20px' />
               </div>
             )}
+
           </>
         )}
       </div>

@@ -55,7 +55,7 @@ export default function JobPostMain({
 
   return (
     <>
-      <div className="relative bg-none shadow-lg rounded-lg border-1 border-gray-100 p-4 my-5">
+      <div className="relative bg-none shadow-md rounded-lg border-1 border-gray-100 p-4 my-5">
         
         <div className="container px-2">
           {/* <div className="grid gap-4 md:grid-cols-[200px_1fr] lg:grid-cols-[300px_1fr] items-start"> */}
@@ -136,7 +136,7 @@ export default function JobPostMain({
             <div className="flex justify-end">
               <Chip startContent= {<Pencil size={15} />} color="primary" variant="bordered"
                 classNames={{
-                  base: "border-1 border-indigo-500 px-3 cursor-pointer",
+                  base: "border-1 border-indigo-500 rounded-small px-2 cursor-pointer",
                   content: "font-medium text-indigo-500",
                 }}
                 onClick={() => handleEdit(id)}
@@ -146,7 +146,7 @@ export default function JobPostMain({
               &nbsp; &nbsp;
               <Chip startContent= {<Trash2 size={15} />} color="danger" variant="bordered"
               classNames={{
-                base: "border-1  px-3 cursor-pointer",
+                base: "border-1 rounded-small px-2 cursor-pointer",
                 content: "font-medium ",
               }}
               onClick={onOpen}

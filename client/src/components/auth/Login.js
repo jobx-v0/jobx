@@ -71,7 +71,7 @@ export default function Login() {
                         </div>
                         <a href="#" className="text-sm font-normal text-blue-700">Forgot password?</a>
                     </div>
-                    <FormAction handleClick={handleClick} text="Login" />
+                    <FormAction handleClick={handleClick} text="Login"  />
                     <p className="mt-4 text-sm text-gray-600 text-center">
                         Not a user? <a href="signup" className="text-blue-700 font-semibold">Sign up</a>
                     </p>

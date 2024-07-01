@@ -21,7 +21,7 @@ export default function FormAction({
                     <Button
                         type={action}
                         className={MainBlueButtonCss}
-                        style={{ width: {width}, padding: padding, fontWeight: fontWeight, margin: '0', justifyContent: 'center', fontSize: fontSize, letterSpacing: '0.8px' }}
+                        style={{ width: width, padding: padding, fontWeight: fontWeight, margin: '0', justifyContent: 'center', fontSize: fontSize, letterSpacing: '0.8px' }}
                         onClick={handleClick}
                         isLoading={loading}
                         disabled={disabled}
